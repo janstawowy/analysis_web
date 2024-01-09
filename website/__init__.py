@@ -1,17 +1,19 @@
 from common import JsonReader
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from os import path
 
 secrets_file_path = "./keys/secrets.json"
 keys_reader = JsonReader(secrets_file_path)
 keys = keys_reader.read_json()
 
 db = SQLAlchemy()
-DB_NAME = 'database.db'
+DB_NAME = 'analysisdb.db'
+
 def create_app():
-
-
-    app = Flask(__name__)
+    abs_instance_path = path.abspath(
+        path.join(path.dirname(__file__), '..', 'instance'))  # <--- this will be the instance directory
+    app = Flask(__name__, instance_path=abs_instance_path)
     app.config['SECRET_KEY'] = keys['flask_secret']
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 
@@ -20,4 +22,18 @@ def create_app():
 
     app.register_blueprint(views,url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+
+    from .models import User, Post
+    db.init_app(app)
+
+    create_database(app)
+
     return app
+
+
+def create_database(app):
+    if not path.exists('instance/'+DB_NAME):
+        from .models import User, Post
+        with app.app_context():
+            db.create_all()
+        print('Setting up a database')
