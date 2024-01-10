@@ -2,6 +2,7 @@ from common import JsonReader
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
+from flask_login import LoginManager
 
 secrets_file_path = "./keys/secrets.json"
 keys_reader = JsonReader(secrets_file_path)
@@ -16,6 +17,16 @@ def create_app():
     app = Flask(__name__, instance_path=abs_instance_path)
     app.config['SECRET_KEY'] = keys['flask_secret']
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    from .models import User, Post
+    db.init_app(app)
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
     from .views import views
     from .auth import auth
@@ -23,8 +34,9 @@ def create_app():
     app.register_blueprint(views,url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User, Post
-    db.init_app(app)
+
+
+
 
     create_database(app)
 
