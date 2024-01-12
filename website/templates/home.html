@@ -1,5 +1,18 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}
 {% block content %}
 <h1>Welcome</h1>
-
+<form method="POST">
+    <div class = 'form-group'>
+        <label for="quick">Quick analysis</label>
+        <input
+                type="hashtag"
+               class="form-control"
+               id="hashtag"
+               name="hashtag"
+               placeholder="Search for #hashtag"
+        />
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary">Find posts</button>
+</form>
 {% endblock %}

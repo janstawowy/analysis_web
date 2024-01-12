@@ -17,7 +17,7 @@ def create_app():
     app = Flask(__name__, instance_path=abs_instance_path)
     app.config['SECRET_KEY'] = keys['flask_secret']
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    from .models import User, Post
+    from .models import User, Dashboard, Post
     db.init_app(app)
     create_database(app)
 
