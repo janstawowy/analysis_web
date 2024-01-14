@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash
 from flask_login import login_required, current_user
 from common import JsonReader
-from sentiment import MastodonPostman, MessageCleaner, SentimentAnalyser
+from sentiment import MastodonPostman, MessageCleaner, SentimentAnalyser, Displayer
 
 views = Blueprint('views', __name__)
 secrets_file_path = "./keys/secrets.json"
@@ -23,6 +23,9 @@ def home():
             analyser = SentimentAnalyser(messages_cleaned)
             sentiment = analyser.analyze_sentiment_transformer("text")
             print(sentiment)
+            displayer = Displayer(sentiment)
+            plot_html = displayer.display_pie()
 
-    return render_template('home.html', user=current_user)
+
+    return render_template('home.html', user=current_user, plot_html=plot_html)
 
