@@ -22,15 +22,15 @@ def home():
             #get posts by hashtag
             postman = MastodonPostman(keys['client_id'], keys['client_secret'], keys['access_token'], keys['api_base_url'])
             messages = postman.return_messages(hashtag)
-            print(messages)
+            #print(messages)
             #clean messages
             message_cleaner = MessageCleaner()
             messages_cleaned = message_cleaner.return_messages(messages)
-            print(messages_cleaned)
+            #print(messages_cleaned)
             #analyse sentiment
             analyser = SentimentAnalyser(messages_cleaned)
             sentiment = analyser.analyze_sentiment_transformer("text")
-            print(sentiment)
+            #print(sentiment)
             #prepare piechart to display
             displayer = Displayer(sentiment)
             plot_html = displayer.display_pie()
@@ -41,12 +41,16 @@ def home():
                 sentiment_transformer = row['sentiment_transformer']
                 transformer_score = row['transformer_score']
                 sentiment_results_adjusted = row['sentiment_results_adjusted']
-                print(row)
-            """
-            new_user = Post(hashtag=hashtag, raw_text=raw_text,
-                            first_name=name)
-            db.session.add(new_user)
-            db.session.commit()"""
+                post = Post.query.filter_by(text=text).first()
+                if(post):
+                    print("already got this one")
+                    continue
+                else:
+
+                    new_post = Post(hashtag=hashtag, raw_text=raw_text,text=text,sentiment_transformer=sentiment_transformer,transformer_score=transformer_score,sentiment_results_adjusted=sentiment_results_adjusted)
+                    db.session.add(new_post)
+                    db.session.commit()
+
 
 
     return render_template('home.html', user=current_user, plot_html=plot_html)
