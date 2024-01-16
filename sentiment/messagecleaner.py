@@ -33,13 +33,14 @@ class MessageCleaner:
             for a_tag in soup.find_all('a'):
                 a_tag.decompose()
             text_content = soup.get_text()
-            text_without_spaces = " ".join(text_content.split())
+            text_without_spaces = " ".join(text_content.split()).strip()
 
             if(len(text_without_spaces)>0):
                 print(text_without_spaces)
                 try:
                     languages = detect_langs(text_without_spaces)
                     language = str(languages[0])[0:2]
+                    print("processing "+text_without_spaces)
                     if (language != "en"):
                         continue
                     data.append({"raw_text":post,"text":text_without_spaces})

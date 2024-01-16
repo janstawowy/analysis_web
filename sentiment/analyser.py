@@ -32,9 +32,10 @@ class SentimentAnalyser:
         sentiment_score = []
         sentiment_results_adjusted =[]
         #classifier = pipeline("sentiment-analysis")
+
         classifier = pipeline(model="finiteautomata/bertweet-base-sentiment-analysis")
         for text in self.dataframe[text_column]:
-            analysis = classifier(text)[0]
+            analysis = classifier(text, padding=True, truncation=True)[0]
             label = analysis["label"]
             score = analysis["score"]
             sentiment_results.append(label)

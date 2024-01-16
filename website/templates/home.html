@@ -16,6 +16,9 @@
     <button type="submit" class="btn btn-primary">Find posts</button>
 </form>
 <div class = 'analysis'>
-{{ plot_html|safe }}
+    {%if plot_html%}
+    {{ plot_html|safe }}
+    {%else%}
+    {%endif%}
 </div>
 {% endblock %}
