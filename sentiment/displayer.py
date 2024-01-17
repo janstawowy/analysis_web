@@ -19,3 +19,22 @@ class Displayer:
 
         # Show the interactive chart
         return fig.to_html(full_html=False)
+
+    def display_timeline(self):
+        """fig = px.line(self.dataframe , x='date', y='sentiment_results_adjusted', title='Sentiment Analysis Timeline',
+                      labels={'date': 'Datetime', 'sentiment_results_adjusted': 'Sentiment'})
+        fig = px.line(self.dataframe , x='date', y='sentiment_results_adjusted', color='sentiment_results_adjusted',
+                      title='Sentiment Analysis Timeline',
+                      labels={'date': 'Datetime', 'sentiment_results_adjusted': 'Sentiment'},
+                      line_group='sentiment_results_adjusted')"""
+        self.dataframe['date'] = self.dataframe['date'].dt.strftime('%d/%m/%Y')
+
+        grouped_df = self.dataframe.groupby(['date', 'sentiment_results_adjusted']).size().reset_index(name='count')
+
+        # Plot the line chart
+        fig = px.line(grouped_df, x='date', y='count', color='sentiment_results_adjusted',
+                      title='Sentiment Analysis Timeline by Day',
+                      labels={'date': 'Date', 'count': 'Count', 'sentiment_results_adjusted': 'Sentiment'},
+                      category_orders={'sentiment_results_adjusted': ['negative', 'neutral', 'positive']})
+
+        return fig.to_html(full_html=False)

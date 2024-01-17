@@ -1,11 +1,11 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %}
+{% extends "base.html" %} {% block title %}timeline{% endblock %}
 {% block content %}
-<h1>Find Posts</h1>
+<h1>Timeline</h1>
 <form method="POST">
     <div class = 'form-group'>
-        <label for="quick">Quick analysis</label>
+        <label for="timeline">Timeline analysis</label>
         <input
-                type="hashtag"
+               type="hashtag"
                class="form-control"
                id="hashtag"
                name="hashtag"
@@ -15,7 +15,7 @@
     <br/>
     <button type="submit" class="btn btn-primary">Find posts</button>
 </form>
-<div class = 'analysis'>
+<div class = 'timeline'>
     {%if plot_html%}
     {{ plot_html|safe }}
     {%else%}

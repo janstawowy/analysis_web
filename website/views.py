@@ -4,6 +4,7 @@ from common import JsonReader
 from sentiment import MastodonPostman, MessageCleaner, SentimentAnalyser, Displayer
 from . import db
 from .models import Post
+import pandas as pd
 
 
 views = Blueprint('views', __name__)
@@ -16,6 +17,8 @@ def home():
     plot_html = None
     if request.method == 'POST':
         hashtag = request.form.get('hashtag')
+        if hashtag.startswith("#"):
+            hashtag = hashtag.replace("#","")
         if len(hashtag) < 3:
             flash('hashtag is too short!', category='error')
         else:
@@ -51,7 +54,37 @@ def home():
                     db.session.add(new_post)
                     db.session.commit()
 
-
-
     return render_template('home.html', user=current_user, plot_html=plot_html)
 
+
+@views.route('/timeline', methods=['GET','POST'])
+@login_required
+def timeline():
+    #initialize plot html as none so if we have no data nothing is displayed
+    plot_html = None
+    #form handling
+    if request.method == 'POST':
+        hashtag = request.form.get('hashtag')
+        if hashtag.startswith("#"):
+            hashtag = hashtag.replace("#", "")
+        if len(hashtag) < 3:
+            flash('hashtag is too short!', category='error')
+        else:
+            posts = Post.query.filter_by(hashtag=hashtag).all()
+            # Decompose each Post object to a dictionary
+            post_dicts = [post.__dict__ for post in posts]
+
+            # Exclude unnecessary keys from the dictionaries
+            for post_dict in post_dicts:
+                post_dict.pop('_sa_instance_state', None)
+
+            # Create a Pandas DataFrame from the list of dictionaries
+            df = pd.DataFrame(post_dicts)
+            displayer = Displayer(df)
+            plot_html = displayer.display_timeline()
+
+
+
+
+
+    return render_template('timeline.html', user=current_user, plot_html=plot_html)
