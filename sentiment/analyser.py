@@ -28,12 +28,16 @@ class SentimentAnalyser:
             - new column sentiment_results_adjusted: more granular label based on score adjusting negative or positive labels
               to reflect strong sentiment values
         """
+
+        # Initialize lists to store results of the analysis
         sentiment_results = []
         sentiment_score = []
         sentiment_results_adjusted =[]
-        #classifier = pipeline("sentiment-analysis")
 
+        # Instantiate HugginFace pipeline that will perform analysis
         classifier = pipeline(model="finiteautomata/bertweet-base-sentiment-analysis")
+
+        # Analyse each row in dataframe and adjust results to better reflect model's confidence
         for text in self.dataframe[text_column]:
             analysis = classifier(text, padding=True, truncation=True)[0]
             label = analysis["label"]
@@ -53,16 +57,12 @@ class SentimentAnalyser:
             else:
                 sentiment_results_adjusted.append("Neutral")
 
-
+        # Add analysis results to input dataframe
         self.dataframe['sentiment_transformer'] = sentiment_results
         self.dataframe["transformer_score"] = sentiment_score
         self.dataframe["sentiment_results_adjusted"] = sentiment_results_adjusted
         return self.dataframe
 
-# Example usage:
-# dataframe = pd.read_csv("your_data.csv")
-# sentiment_analyser = SentimentAnalyser(dataframe)
-# dataframe_with_sentiment = sentiment_analyser.analyze_sentiment_transformer("text_column_name")
 
 
 

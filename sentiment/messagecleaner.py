@@ -29,20 +29,26 @@ class MessageCleaner:
         data = []
         for post in self.posts:
 
+            # Instantiate a BS object to clean html code
             soup = BeautifulSoup(post, 'html.parser')
+            # Remove anchor tags
             for a_tag in soup.find_all('a'):
                 a_tag.decompose()
+
+            # Get text and remove extra spaces
             text_content = soup.get_text()
             text_without_spaces = " ".join(text_content.split()).strip()
 
             if(len(text_without_spaces)>0):
                 print(text_without_spaces)
                 try:
+                    # Detect language of the text and if it's not English continue to next row
                     languages = detect_langs(text_without_spaces)
                     language = str(languages[0])[0:2]
                     print("processing "+text_without_spaces)
                     if (language != "en"):
                         continue
+                    # If text is in english append raw text and processed text to dataframe
                     data.append({"raw_text":post,"text":text_without_spaces})
                 except:
                     continue
