@@ -87,10 +87,10 @@ Access the Application on your localhost
 ```
 
 ## 🔍 Examples
-todo
-
-
-
+Login Page
+Search by #Hashtag
+SearchTimeline
+![Project screenshot](images/screenshot.png)
 
 ## 📜 License
 
