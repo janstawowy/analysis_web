@@ -88,7 +88,9 @@ Access the Application on your localhost
 
 ## 🔍 Examples
 Login Page
+![Project screenshot](signup.png)
 Search by #Hashtag
+![Project screenshot](pie.png)
 SearchTimeline
 ![Project screenshot](timeline.png)
 
