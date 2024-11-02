@@ -90,7 +90,7 @@ Access the Application on your localhost
 Login Page
 Search by #Hashtag
 SearchTimeline
-![Project screenshot](images/screenshot.png)
+![Project screenshot](timeline.png)
 
 ## 📜 License
 
