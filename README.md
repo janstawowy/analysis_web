@@ -9,6 +9,7 @@
 ## 📋 Table of Contents
 - [Overview](#-overview)
 - [Features](#-features)
+- [Build With](#-build-with)
 - [Installation](#-installation)
 - [Usage](#-usage)
 - [Examples](#-examples)
@@ -31,6 +32,16 @@ A tool designed to search posts by hashtag on Mastodon and analyze their sentime
 - **Quick Search**: Users can search posts by #hashtag and obtain quick analysis of recent posts sentiment displayed as a pie chart.
 - **Timeline**: Users can view how sentiment changed over time for the #hashtag based on their past searches displayed as a linechart.
 
+---
+## 🔧 Build With
+- Python
+- Flask
+- Plotly
+- SQLAlchemy
+- Transformers
+- BeautifulSoup
+- Pandas
+- Pytest
 ---
 
 ## 🔧 Installation
